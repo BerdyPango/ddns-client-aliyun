@@ -1,10 +1,14 @@
 
 from utils import DDNSUtils
+from config import Config
 
-class DDNSCoordinator(object):
+class DDNSCoordinator:
+    """
+    An object to coordinate the ddns process
+    """
 
-    def __init__(self, config):
-        self.config = config
+    def __init__(self, Config):
+        self.configuration = Config
         self.current_records_list = []
 
 

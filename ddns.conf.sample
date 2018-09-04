@@ -1,0 +1,16 @@
+[DEFAULT]
+interval = 500
+
+[ApiProvider]
+access_id = 1234567890
+access_key = 0987654321
+
+[DomainNameToUpdate1]
+domain = example.com
+sub_domain = www, api
+type = A
+
+[DomainNameToUpdate2]
+domain = example2.com
+sub_domain = cloud, home
+type = A
