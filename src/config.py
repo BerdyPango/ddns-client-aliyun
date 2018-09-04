@@ -41,7 +41,7 @@ class Config:
                     DDNSUtils.err_and_exit("Invalid domian record.")
 
                 for subDomain in subDomains:
-                    record = DomainNameRecord(domain, subDomain, type)
+                    record = DomainNameRecord(domain, subDomain.strip(), type)
                     records.append(record)
             config = Config(apiProviderInfo, interval, records)
             return config
