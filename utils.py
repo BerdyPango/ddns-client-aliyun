@@ -18,9 +18,11 @@
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 """
 import sys
+import requests
+
 from datetime import datetime
 
-import requests
+
 
 
 class DDNSUtils(object):

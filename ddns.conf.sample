@@ -1,5 +1,4 @@
 [DEFAULT]
-interval = 500
 
 [ApiProvider]
 access_id = 1234567890
