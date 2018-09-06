@@ -33,7 +33,7 @@ class AliYunResolver:
 
         common_params = {
             'Format': 'json',
-            'Version': '1.0',
+            'Version': '2015-01-09',
             'AccessKeyId': self.access_id,
             'Timestamp': current_timestamp,
             'SignatureMethod': 'HMAC-SHA1',

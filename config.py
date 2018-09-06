@@ -72,7 +72,7 @@ class Config:
         records = []
         try:
             for fullDomain in domains:
-                record = DomainResolutionRecord.fromFullDomain(fullDomain, type)
+                record = DomainResolutionRecord.from_full_domain(fullDomain, type)
                 records.append(record)
             config = cls(apiProviderInfo, records)
             return config
