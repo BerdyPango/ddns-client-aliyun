@@ -2,7 +2,7 @@
 # coding=utf-8
 import socket
 
-class DomainResolutionRecord:
+class DomainSection:
 
 
     def __init__(self, domainName, subDomainName, type):
@@ -25,6 +25,6 @@ class DomainResolutionRecord:
         ip_addr = socket.gethostbyname(hostname)
         return ip_addr
 
-record = DomainResolutionRecord('berdypango.cn','ha','A')
+record = DomainSection('berdypango.cn','ha','A')
 ip_addr = record.get_dns_resolved_ip()
 print(ip_addr)

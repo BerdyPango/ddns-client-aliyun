@@ -2,7 +2,7 @@ import configparser as ConfigParser
 
 from utils import DDNSUtils
 from apiProviderInfo import ApiProviderInfo
-from domainResolutionRecord import DomainResolutionRecord
+from domainSection import DomainSection
 
 class Config:
     """
@@ -50,7 +50,7 @@ class Config:
                     DDNSUtils.err_and_exit("Invalid domian record.")
 
                 for subDomain in subDomains:
-                    record = DomainResolutionRecord(domain, subDomain.strip(), type)
+                    record = DomainSection(domain, subDomain.strip(), type)
                     records.append(record)
             config = cls(apiProviderInfo, records)
             return config
@@ -72,7 +72,7 @@ class Config:
         records = []
         try:
             for fullDomain in domains:
-                record = DomainResolutionRecord.from_full_domain(fullDomain, type)
+                record = DomainSection.from_full_domain(fullDomain, type)
                 records.append(record)
             config = cls(apiProviderInfo, records)
             return config
@@ -82,7 +82,7 @@ class Config:
 try:
     import os
     dir = os.path.dirname(__file__)
-    filename = os.path.join(dir, 'ddns.conf.sample')
+    filename = os.path.join(dir, 'config-samples/ddns.conf.sample')
     config = Config.from_config_file(filename)
     assert config.apiProviderInfo.apiAccessId == '1234567890'
     assert config.apiProviderInfo.apiAccessKey == '0987654321'

@@ -230,3 +230,7 @@ class AliYunResolver:
             return False
 
         return ret.json()
+
+resolver = AliYunResolver('LTAIW606RoKrwBPP', 'Er4PrEwRejknamwFkngcnj2IdXCPRA', True)
+records = resolver.get_domain_records('berdypango.cn')
+print(records)

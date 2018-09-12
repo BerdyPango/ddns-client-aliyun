@@ -23,7 +23,7 @@ if args.config:
         DDNSUtils.err_and_exit('File not found: {0}'.format(CONFIG_FILE_PATH))
     config = Config.from_config_file(CONFIG_FILE_PATH)
     coordinator = DDNSCoordinator(config)
-
+    coordinator.perform_ddns()
     sys.exit()
 
 if not args.domains or not args.access_id or not args.access_key:
@@ -31,4 +31,6 @@ if not args.domains or not args.access_id or not args.access_key:
 else:
     config = Config.from_cli_options(args.domains, args.access_id, args.access_key, args.type)
     coordinator = DDNSCoordinator(config)
+    coordinator.perform_ddns()
 
+sys.exit()
