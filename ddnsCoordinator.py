@@ -13,7 +13,7 @@ class DDNSCoordinator:
 
     def __init__(self, configuration):
         self.configuration = configuration
-        self.dnsResolver = AliYunResolver(configuration.access_id,configuration.access_key, True)
+        self.dnsResolver = AliYunResolver(configuration.apiProviderInfo.apiAccessId, configuration.apiProviderInfo.apiAccessKey, True)
         self.current_records_list = []
 
 
@@ -21,14 +21,15 @@ class DDNSCoordinator:
         current_public_ip = DDNSUtils.get_current_public_ip()
 
         if not current_public_ip:
-            DDNSUtils.err_and_exit("Failed to get current public IP")
+            DDNSUtils.err_and_exit("Failed to get local public IP")
+        
+        DDNSUtils.info("Local public IP Read: {0}".format(current_public_ip))
 
         for record_to_update in self.configuration.recordsToUpdate:
             dns_resolved_ip = record_to_update.get_dns_resolved_ip()
 
             if current_public_ip == dns_resolved_ip:
-                DDNSUtils.info("Skipped as no changes for DomainRecord" \
-                           "[{rec.subDomainName}.{rec.domainName}]".format(rec=record_to_update))
+                DDNSUtils.info("Skipped as no changes for DomainRecord: [{rec.subDomainName}.{rec.domainName}]".format(rec=record_to_update))
                 continue
 
             # If current public IP doesn't equal to current DNS resolved ip, only in three cases:
@@ -37,27 +38,27 @@ class DDNSCoordinator:
             # 3. current public IP is changed
             dns_record = self.get_dns_record(record_to_update)
             if not dns_record:
-                DDNSUtils.err("Failed to get dns resolution record for [{rec.subDomainName}.{rec.DomainName}]".format(rec=record_to_update))
+                DDNSUtils.err("Failed to get dns resolution record for [{rec.subDomainName}.{rec.domainName}]".format(rec=record_to_update))
                 continue
             
             if current_public_ip == dns_record.value:
-                DDNSUtils.info("Skipped: dns record already updated: [{rec.subDomainName}.{rec.DomainName}]".format(rec=record_to_update))
+                DDNSUtils.info("Skipped: dns record already updated: [{rec.subDomainName}.{rec.domainName}]".format(rec=record_to_update))
                 continue
             
             result = self.update_dns_record(dns_record, current_public_ip)
             if not result:
-                DDNSUtils.err("Failed to update dns record: [{rec.subDomainName}.{rec.DomainName}]".format(rec=record_to_update))
+                DDNSUtils.err("Failed to update dns record: [{rec.subDomainName}.{rec.domainName}]".format(rec=record_to_update))
             else:
-                DDNSUtils.info("Successfully update dns record: [{rec.subDomainName}.{rec.DomainName}]".format(rec=record_to_update))
+                DDNSUtils.info("Successfully update dns record: [{rec.subDomainName}.{rec.domainName}]".format(rec=record_to_update))
 
     def get_dns_record(self, dns_section):
-
+            DDNSUtils.info("Reading dns records for [{section.subDomainName}.{section.domainName}], type=[{section.type}]".format(section=dns_section))
             dns_record_list = self.dnsResolver.get_domain_records(dns_section.domainName, 
                                                                 rr_keyword=dns_section.subDomainName, 
                                                                 type_keyword=dns_section.type)
 
             if not dns_record_list:
-                DDNSUtils.err("Failed to fetch dns resolution records for {rec.domainName} by rr={rec.subDomainName} and type={rec.type}").format(rec=dns_section)
+                DDNSUtils.err("Failed to fetch dns resolution records for {rec.domainName} by rr={rec.subDomainName} and type={rec.type}".format(rec=dns_section))
                 return None
 
             keys_to_check = ('DomainName', 'RR', 'Type')
@@ -71,7 +72,7 @@ class DDNSCoordinator:
                 return None
 
             if len(matched_records) > 1:
-                DDNSUtils.err('Duplicate dns resolution records: {rec.subDomainName}.{rec.domaiNname}').format(rec=dns_section)
+                DDNSUtils.err('Duplicate dns resolution records: {rec.subDomainName}.{rec.domaiNname}'.format(rec=dns_section))
             
             try:
                 dns_record = DnsRecord(matched_records[0])

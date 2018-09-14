@@ -2,6 +2,8 @@
 # coding=utf-8
 import socket
 
+from utils import DDNSUtils
+
 class DomainSection:
 
 
@@ -22,9 +24,11 @@ class DomainSection:
             hostname = self.domainName
         else:
             hostname = "{0}.{1}".format(self.subDomainName, self.domainName)
-        ip_addr = socket.gethostbyname(hostname)
-        return ip_addr
-
-record = DomainSection('berdypango.cn','ha','A')
-ip_addr = record.get_dns_resolved_ip()
-print(ip_addr)
+        
+        try:
+            ip_addr = socket.gethostbyname(hostname)
+            DDNSUtils.info("RR value read: {0} for {1}".format(ip_addr, hostname))
+            return ip_addr
+        except Exception as exception:
+            DDNSUtils.err("Failed to read ip address for {0}".format(hostname))
+            raise exception

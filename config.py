@@ -35,9 +35,13 @@ class Config:
         try:
             access_id = parser.get("ApiProvider", "access_id")
             access_key = parser.get("ApiProvider", "access_key")
+            
             if not access_id or not access_key:
                 DDNSUtils.err_and_exit("Invalid access_id or access_key in config file.")
             apiProviderInfo = ApiProviderInfo(access_id,access_key)
+
+            DDNSUtils.info("Read Access Id: {0}".format(access_id))
+            DDNSUtils.info("Read Access Key: {0}".format(access_key))
 
             recordsSections = [s for s in parser.sections() if s.startswith("DomainNameToUpdate") ]
 
@@ -48,6 +52,10 @@ class Config:
                 subDomains = parser.get(record,'sub_domain').split(',')
                 if not domain or not type or not subDomains:
                     DDNSUtils.err_and_exit("Invalid domian record.")
+                
+                DDNSUtils.info("Read Domain: {0}".format(domain))
+                DDNSUtils.info("Read Sub Domains: {0}".format(subDomains))
+                DDNSUtils.info("Read Type: {0}".format(type))
 
                 for subDomain in subDomains:
                     record = DomainSection(domain, subDomain.strip(), type)
