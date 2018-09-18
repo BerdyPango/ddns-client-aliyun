@@ -11,6 +11,11 @@ from datetime import datetime
 
 import requests
 
+from aliyunsdkcore.client import AcsClient
+from aliyunsdkalidns.request.v20150109 import DescribeDomainRecordsRequest, UpdateDomainRecordRequest
+
+import json
+
 class AliYunResolver:
     """
     Implementation of Aliyun Resolver API

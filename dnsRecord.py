@@ -21,8 +21,8 @@ class DnsRecord:
         self.status = None
         self.locked = False
 
-        lowered_info = map(lower_func, dns_resolution_record.keys(), dns_resolution_record.values())
-        tuples = zip(lowered_info)
+        lowered_info = map(lower_func, dns_resolution_record.keys())
+        tuples = zip(lowered_info, dns_resolution_record.values())
         converted_dns_resolution_info = dict(tuples)
 
         for key in converted_dns_resolution_info.keys():

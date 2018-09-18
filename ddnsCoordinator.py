@@ -1,5 +1,7 @@
+import json
 
-
+from aliyunsdkcore.client import AcsClient
+from aliyunsdkalidns.request.v20150109 import DescribeDomainRecordsRequest, UpdateDomainRecordRequest
 
 from utils import DDNSUtils
 from config import Config
@@ -13,7 +15,8 @@ class DDNSCoordinator:
 
     def __init__(self, configuration):
         self.configuration = configuration
-        self.dnsResolver = AliYunResolver(configuration.apiProviderInfo.apiAccessId, configuration.apiProviderInfo.apiAccessKey, True)
+        self.access_key_id = configuration.apiProviderInfo.apiAccessId
+        self.access_Key_secret = configuration.apiProviderInfo.apiAccessKey
         self.current_records_list = []
 
 
@@ -53,19 +56,24 @@ class DDNSCoordinator:
 
     def get_dns_record(self, dns_section):
             DDNSUtils.info("Reading dns records for [{section.subDomainName}.{section.domainName}], type=[{section.type}]".format(section=dns_section))
-            dns_record_list = self.dnsResolver.get_domain_records(dns_section.domainName, 
-                                                                rr_keyword=dns_section.subDomainName, 
-                                                                type_keyword=dns_section.type)
+
+            acsClient = AcsClient(ak=self.access_key_id, secret=self.access_Key_secret, region_id='cn-hangzhou')
+            request = DescribeDomainRecordsRequest.DescribeDomainRecordsRequest()
+            request.set_DomainName(dns_section.domainName)
+            request.set_accept_format('json')
+            result = acsClient.do_action_with_exception(request)
+            result = json.JSONDecoder().decode(result)
+
+            dns_record_list = result['DomainRecords']['Record']
 
             if not dns_record_list:
                 DDNSUtils.err("Failed to fetch dns resolution records for {rec.domainName} by rr={rec.subDomainName} and type={rec.type}".format(rec=dns_section))
                 return None
-
-            keys_to_check = ('DomainName', 'RR', 'Type')
+                
             matched_records = []
 
             for record in dns_record_list:
-                if all(record.get(key, None) == getattr(dns_section, key.lower()) for key in keys_to_check):
+                if record['DomainName'] == dns_section.domainName and record['RR'] == dns_section.subDomainName and record['Type'] == dns_section.type:
                     matched_records.append(record)
 
             if not matched_records:
@@ -82,4 +90,15 @@ class DDNSCoordinator:
             return dns_record
 
     def update_dns_record(self, dns_record, public_ip):
-        return self.dnsResolver.update_domain_record(dns_record.recordid, rr=dns_record.rr, record_value=public_ip)
+        acsClient = AcsClient(ak=self.access_key_id, secret=self.access_Key_secret, region_id='cn-hangzhou')
+        request = UpdateDomainRecordRequest.UpdateDomainRecordRequest()
+        request.set_RR(dns_record.rr)
+        request.set_Type(dns_record.type)
+        request.set_Value(dns_record.value)
+        request.set_RecordId(dns_record.recordid)
+        request.set_TTL(dns_record.ttl)
+        request.set_accept_format('json')
+        print request,"---"
+        result = acsClient.do_action(request)
+        print result
+        return result
