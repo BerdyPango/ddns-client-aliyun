@@ -1,4 +1,4 @@
-import configparser as ConfigParser
+import ConfigParser
 
 from utils import DDNSUtils
 from apiProviderInfo import ApiProviderInfo

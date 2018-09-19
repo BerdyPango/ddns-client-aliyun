@@ -98,7 +98,7 @@ class DDNSCoordinator:
         """
         Update a dns record at dns provider side with a given dns record
         """
-        DDNSUtils.info('Updating value [{rec.value}] for [{rec.rr}.{rec.domainName}]'.format(rec=dns_record))
+        DDNSUtils.info('Updating value [{rec.value}] for [{rec.rr}.{rec.domainname}]'.format(rec=dns_record))
         acsClient = AcsClient(ak=self.access_key_id, secret=self.access_Key_secret, region_id='cn-hangzhou')
         request = UpdateDomainRecordRequest.UpdateDomainRecordRequest()
         request.set_RR(dns_record.rr)
@@ -111,5 +111,5 @@ class DDNSCoordinator:
             result = acsClient.do_action_with_exception(request)
             return result
         except Exception as exception:
-            DDNSUtils.err('Failed to update value [{rec.value}] for [{rec.rr}.{rec.domainName}]'.format(rec=dns_record))
+            DDNSUtils.err('Failed to update value [{rec.value}] for [{rec.rr}.{rec.domainname}]'.format(rec=dns_record))
             raise exception
