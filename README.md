@@ -5,12 +5,14 @@ This version of DDNS client only supports updating 'A' type dns record with IPv4
 
 ## Prerequisite
 Some 3rd party python libraries are required, you can install them via pip:
+- requests
 - aliyun-python-sdk-core
 - aliyun-python-sdk-alidns
 
 For example:
 
 ``` bash
+$(sudo) pip install requests
 $(sudo) pip install aliyun-python-sdk-core
 $(sudo) pip install aliyun-python-sdk-alidns
 ```
