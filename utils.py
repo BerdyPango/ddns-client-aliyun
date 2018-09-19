@@ -37,7 +37,7 @@ class DDNSUtils(object):
         try:
             response = requests.get("http://members.3322.org/dyndns/getip")
         except requests.RequestException as ex:
-            msg = "network problem:{0}".format(ex)
+            msg = "network problem: {0}".format(ex)
             DDNSUtils.err(msg)
             return None
 

@@ -33,15 +33,15 @@ class Config:
             DDNSUtils.err_and_exit("Failed to read config file.")
 
         try:
-            access_id = parser.get("ApiProvider", "access_id")
-            access_key = parser.get("ApiProvider", "access_key")
+            access_key_id = parser.get("ApiProvider", "access_key_id")
+            access_key_secret = parser.get("ApiProvider", "access_key_secret")
             
-            if not access_id or not access_key:
+            if not access_key_id or not access_key_secret:
                 DDNSUtils.err_and_exit("Invalid access_id or access_key in config file.")
-            apiProviderInfo = ApiProviderInfo(access_id,access_key)
+            apiProviderInfo = ApiProviderInfo(access_key_id, access_key_secret)
 
-            DDNSUtils.info("Read Access Id: {0}".format(access_id))
-            DDNSUtils.info("Read Access Key: {0}".format(access_key))
+            DDNSUtils.info("Read Access Key Id: [{0}]".format(access_key_id))
+            DDNSUtils.info("Read Access Key Secret: [{0}]".format(access_key_secret))
 
             recordsSections = [s for s in parser.sections() if s.startswith("DomainNameToUpdate") ]
 
@@ -53,9 +53,9 @@ class Config:
                 if not domain or not type or not subDomains:
                     DDNSUtils.err_and_exit("Invalid domian record.")
                 
-                DDNSUtils.info("Read Domain: {0}".format(domain))
-                DDNSUtils.info("Read Sub Domains: {0}".format(subDomains))
-                DDNSUtils.info("Read Type: {0}".format(type))
+                DDNSUtils.info("Read Domain: [{0}]".format(domain))
+                DDNSUtils.info("Read Sub Domains: [{0}]".format(subDomains))
+                DDNSUtils.info("Read Type: [{0}]".format(type))
 
                 for subDomain in subDomains:
                     record = DomainSection(domain, subDomain.strip(), type)
@@ -71,11 +71,11 @@ class Config:
             DDNSUtils.err_and_exit("Invalid config: {0}".format(ex))
 
     @classmethod
-    def from_cli_options(cls, domains, access_id, access_key, type):
-        if not domains or not access_id or not access_key:
-            DDNSUtils.err_and_exit("Aruguments are not sufficient.")
+    def from_cli_options(cls, domains, access_key_id, access_key_secret, type):
+        if not domains or not access_key_id or not access_key_secret:
+            DDNSUtils.err_and_exit("Aruguments are not sufficient: domains, access_key_id and access_key_secret")
         
-        apiProviderInfo = ApiProviderInfo(access_id, access_key)
+        apiProviderInfo = ApiProviderInfo(access_key_id, access_key_secret)
 
         records = []
         try:
@@ -86,19 +86,3 @@ class Config:
             return config
         except ValueError as ex:
             DDNSUtils.err_and_exit("Invalid parameters in config: {0}".format(ex))
-
-try:
-    import os
-    dir = os.path.dirname(__file__)
-    filename = os.path.join(dir, 'config-samples/ddns.conf.sample')
-    config = Config.from_config_file(filename)
-    assert config.apiProviderInfo.apiAccessId == '1234567890'
-    assert config.apiProviderInfo.apiAccessKey == '0987654321'
-
-    config = Config.from_cli_options(['www.example.com','api.example.com'],'123435454','123243545','A')
-    assert config.apiProviderInfo.apiAccessId == '123435454'
-    assert config.apiProviderInfo.apiAccessKey == '123243545'
-except Exception as error:
-    print("error: {0}".format(error.args))
-else:
-    pass

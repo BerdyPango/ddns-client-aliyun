@@ -1,9 +1,11 @@
 [DEFAULT]
 
 [ApiProvider]
-access_id = 1234567890
-access_key = 0987654321
+# access_key_id and access_key_secret acquired from dns provider
+access_key_id = 1234567890
+access_key_secret = 0987654321
 
+# The dns record to update, specify multiple sub domians with ','
 [DomainNameToUpdate1]
 domain = example.com
 sub_domain = www, api

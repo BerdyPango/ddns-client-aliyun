@@ -27,8 +27,8 @@ class DomainSection:
         
         try:
             ip_addr = socket.gethostbyname(hostname)
-            DDNSUtils.info("RR value read: {0} for {1}".format(ip_addr, hostname))
+            DDNSUtils.info("RR value read: [{0}] for [{1}]".format(ip_addr, hostname))
             return ip_addr
         except Exception as exception:
-            DDNSUtils.err("Failed to read ip address for {0}".format(hostname))
+            DDNSUtils.err("Failed to read ip address for [{0}]".format(hostname))
             raise exception

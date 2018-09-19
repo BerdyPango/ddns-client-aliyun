@@ -5,28 +5,29 @@ from aliyunsdkalidns.request.v20150109 import DescribeDomainRecordsRequest, Upda
 
 from utils import DDNSUtils
 from config import Config
-from aliyunResolver import AliYunResolver
 from dnsRecord import DnsRecord
 
 class DDNSCoordinator:
     """
-    An object to coordinate the ddns process
+    An object to coordinate ddns process
     """
-
     def __init__(self, configuration):
         self.configuration = configuration
-        self.access_key_id = configuration.apiProviderInfo.apiAccessId
-        self.access_Key_secret = configuration.apiProviderInfo.apiAccessKey
+        self.access_key_id = configuration.apiProviderInfo.access_key_id
+        self.access_Key_secret = configuration.apiProviderInfo.access_key_secret
         self.current_records_list = []
 
 
     def perform_ddns(self):
+        """
+        Perform the ddns process when everything is ready
+        """
         current_public_ip = DDNSUtils.get_current_public_ip()
 
         if not current_public_ip:
             DDNSUtils.err_and_exit("Failed to get local public IP")
         
-        DDNSUtils.info("Local public IP Read: {0}".format(current_public_ip))
+        DDNSUtils.info("Local public ip address read: [{0}]".format(current_public_ip))
 
         for record_to_update in self.configuration.recordsToUpdate:
             dns_resolved_ip = record_to_update.get_dns_resolved_ip()
@@ -48,6 +49,7 @@ class DDNSCoordinator:
                 DDNSUtils.info("Skipped: dns record already updated: [{rec.subDomainName}.{rec.domainName}]".format(rec=record_to_update))
                 continue
             
+            dns_record.value = current_public_ip
             result = self.update_dns_record(dns_record, current_public_ip)
             if not result:
                 DDNSUtils.err("Failed to update dns record: [{rec.subDomainName}.{rec.domainName}]".format(rec=record_to_update))
@@ -55,6 +57,9 @@ class DDNSCoordinator:
                 DDNSUtils.info("Successfully update dns record: [{rec.subDomainName}.{rec.domainName}]".format(rec=record_to_update))
 
     def get_dns_record(self, dns_section):
+            """
+            Get the dns record from dns provider by a given dns section
+            """
             DDNSUtils.info("Reading dns records for [{section.subDomainName}.{section.domainName}], type=[{section.type}]".format(section=dns_section))
 
             acsClient = AcsClient(ak=self.access_key_id, secret=self.access_Key_secret, region_id='cn-hangzhou')
@@ -67,7 +72,7 @@ class DDNSCoordinator:
             dns_record_list = result['DomainRecords']['Record']
 
             if not dns_record_list:
-                DDNSUtils.err("Failed to fetch dns resolution records for {rec.domainName} by rr={rec.subDomainName} and type={rec.type}".format(rec=dns_section))
+                DDNSUtils.err("Failed to fetch dns resolution records for [{rec.domainName}] by rr={rec.subDomainName} and type={rec.type}".format(rec=dns_section))
                 return None
                 
             matched_records = []
@@ -80,7 +85,7 @@ class DDNSCoordinator:
                 return None
 
             if len(matched_records) > 1:
-                DDNSUtils.err('Duplicate dns resolution records: {rec.subDomainName}.{rec.domaiNname}'.format(rec=dns_section))
+                DDNSUtils.err('Duplicate dns resolution records: [{rec.subDomainName}.{rec.domaiNname}]'.format(rec=dns_section))
             
             try:
                 dns_record = DnsRecord(matched_records[0])
@@ -90,6 +95,10 @@ class DDNSCoordinator:
             return dns_record
 
     def update_dns_record(self, dns_record, public_ip):
+        """
+        Update a dns record at dns provider side with a given dns record
+        """
+        DDNSUtils.info('Updating value [{rec.value}] for [{rec.rr}.{rec.domainName}]'.format(rec=dns_record))
         acsClient = AcsClient(ak=self.access_key_id, secret=self.access_Key_secret, region_id='cn-hangzhou')
         request = UpdateDomainRecordRequest.UpdateDomainRecordRequest()
         request.set_RR(dns_record.rr)
@@ -98,7 +107,9 @@ class DDNSCoordinator:
         request.set_RecordId(dns_record.recordid)
         request.set_TTL(dns_record.ttl)
         request.set_accept_format('json')
-        print request,"---"
-        result = acsClient.do_action(request)
-        print result
-        return result
+        try:
+            result = acsClient.do_action_with_exception(request)
+            return result
+        except Exception as exception:
+            DDNSUtils.err('Failed to update value [{rec.value}] for [{rec.rr}.{rec.domainName}]'.format(rec=dns_record))
+            raise exception
