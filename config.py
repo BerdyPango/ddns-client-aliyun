@@ -12,7 +12,7 @@ class Config:
         apiProviderInfo: the object holds the api provider information
         recordsToUpdate: a list holding all the domain name resolution records to update
     Returns: 
-        An object of Config
+        Instance of Config
     """
     def __init__(self, apiProviderInfo, recordsToUpdate):
         self.apiProviderInfo = apiProviderInfo
@@ -21,12 +21,12 @@ class Config:
     @classmethod
     def from_config_file(cls, configFilePath):
         """
-        Construct a Config object from a given config file path
+        Construct a Config object from a given config file
 
         Args:
-            configFilePath: path of the given config file
+            configFilePath: path to the given config file
         Returns: 
-            An object of Config
+            Instance of Config
         """
         parser = ConfigParser.ConfigParser()
         if not parser.read(configFilePath):
@@ -72,6 +72,17 @@ class Config:
 
     @classmethod
     def from_cli_options(cls, domains, access_key_id, access_key_secret, type):
+        """
+        Construct a Config object from a set of given configurations
+
+        Args:
+            domains: domains to update
+            access_key_id: access key id provided by api provider
+            access_key_secret: access key secret provided by api provider
+            type: dns record type, for now only 'A' is supported
+        Returns: 
+            Instance of Config
+        """
         if not domains or not access_key_id or not access_key_secret:
             DDNSUtils.err_and_exit("Aruguments are not sufficient: domains, access_key_id and access_key_secret")
         

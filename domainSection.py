@@ -5,8 +5,9 @@ import socket
 from utils import DDNSUtils
 
 class DomainSection:
-
-
+    """
+    Object represents dns config section.
+    """
     def __init__(self, domainName, subDomainName, type):
         self.domainName = domainName
         self.subDomainName = subDomainName

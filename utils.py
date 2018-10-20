@@ -23,10 +23,8 @@ import requests
 from datetime import datetime
 
 
-
-
 class DDNSUtils(object):
-    
+
     @staticmethod
     def get_current_public_ip():
         """
@@ -42,7 +40,8 @@ class DDNSUtils(object):
             return None
 
         if response.status_code != requests.codes['ok']:
-            msg = "Failed to get current public IP: {0}\n{1}".format(response.status_code, response.content)
+            msg = "Failed to get current public IP: {0}\n{1}".format(
+                response.status_code, response.content)
             DDNSUtils.err(msg)
             return None
 
@@ -54,7 +53,8 @@ class DDNSUtils(object):
         Output informative message
         :param msg: Message to display
         """
-        sys.stdout.write("{0}\t[INFO]\t{1}\n".format(DDNSUtils.get_current_time(), msg))
+        sys.stdout.write("{0}\t[INFO]\t{1}\n".format(
+            DDNSUtils.get_current_time(), msg))
 
     @staticmethod
     def err(msg):
@@ -62,7 +62,8 @@ class DDNSUtils(object):
         Output error message
         :param msg: Message to display
         """
-        sys.stderr.write("{0}\t[ERROR]\t{1}\n".format(DDNSUtils.get_current_time(), msg))
+        sys.stderr.write("{0}\t[ERROR]\t{1}\n".format(
+            DDNSUtils.get_current_time(), msg))
 
     @staticmethod
     def err_and_exit(msg):
@@ -70,7 +71,8 @@ class DDNSUtils(object):
         Output error message and exit
         :param msg: Message to display
         """
-        sys.stderr.write("{0}\t[ERROR]\t{1}\n".format(DDNSUtils.get_current_time(), msg))
+        sys.stderr.write("{0}\t[ERROR]\t{1}\n".format(
+            DDNSUtils.get_current_time(), msg))
         sys.exit(1)
 
     @staticmethod
