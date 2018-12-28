@@ -67,14 +67,15 @@ $ (sudo) python ddns.py --config ddns.conf
 If you prefer the Docker way. You could find the docker image at [Docker Hub](https://hub.docker.com/r/frosthe/ddns-client-aliyun). Just simply pull it to your home server or local machine:
 ```
 $ (sudo) docker pull frosthe/ddns-client-aliyun
-$ (sudo) docker run \
-frosthe/ddns-client-aliyun \ 
---config ./ddns.conf
 ```
-
-- DOMAINS: Specify multiple domains by seperating them with `;`
-- ACCESS_KEY_ID: Assigned by Aliyun, find it from your aliyun account
-- ACCESS_KEY_SECRET: Assigned by Aliyun, find it from your aliyun account
+Run the docker image with same options like the client:
+```bash
+$ (sudo) docker run frosthe/ddns-client-aliyun --config ./ddns.conf
+```
+or
+```bash
+$ (sudo) docker run frosthe/ddns-client-aliyun --domains www.example.com --access-key-id XXXXXXXXX --access-key-secret XXXXXXXXXXXXX
+```
 
 The client will exit immediately after running through. If you want to run it regularly, append a crontab job on *NIX or a task scheduler job on Windows. For example, we could restart the docker container every 10 seconds:
 ```bash
