@@ -64,7 +64,7 @@ $ (sudo) python ddns.py --config ddns.conf
 ```
 
 ## Docker Support
-If you prefer the Docker way. You could find the docker image at [Docker Hub](https://cloud.docker.com/u/frosthe/repository/docker/frosthe/ddns-client-aliyun). Just simply pull it to your home server or local machine:
+If you prefer the Docker way. You could find the docker image at [Docker Hub](https://hub.docker.com/r/frosthe/ddns-client-aliyun). Just simply pull it to your home server or local machine:
 ```
 $ (sudo) docker pull frosthe/ddns-client-aliyun
 $ (sudo) docker run \
