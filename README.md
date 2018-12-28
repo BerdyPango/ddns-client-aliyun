@@ -68,15 +68,22 @@ If you prefer the Docker way. You could find the docker image at [Docker Hub](ht
 ```
 $ (sudo) docker pull frosthe/ddns-client-aliyun
 $ (sudo) docker run \
--e DOMAINS='test1.example.com; test2.example.com' \
--e ACCESS_KEY_ID={your-access-key-id} \
--e ACCESS_KEY_SECRET={your-access-key-secret} \
-frosthe/ddns-client-aliyun
+frosthe/ddns-client-aliyun \ 
+--config ./ddns.conf
 ```
 
 - DOMAINS: Specify multiple domains by seperating them with `;`
 - ACCESS_KEY_ID: Assigned by Aliyun, find it from your aliyun account
 - ACCESS_KEY_SECRET: Assigned by Aliyun, find it from your aliyun account
 
+The client will exit immediately after running through. If you want to run it regularly, append a crontab job on *NIX or a task scheduler job on Windows. For example, we could restart the docker container every 10 seconds:
+```bash
+$ crontab -e
 
-The client will exit immediately after running through. If you want to run it regularly, append a crontab job on *NIX or a task scheduler job on Windows.
+* * * * * (docker container restart ddns-client-aliyun)
+* * * * * (sleep 10; docker container restart ddns-client-aliyun)
+* * * * * (sleep 20; docker container restart ddns-client-aliyun)
+* * * * * (sleep 30; docker container restart ddns-client-aliyun)
+* * * * * (sleep 40; docker container restart ddns-client-aliyun)
+* * * * * (sleep 50; docker container restart ddns-client-aliyun)
+```
