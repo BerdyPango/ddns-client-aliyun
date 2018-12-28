@@ -80,7 +80,7 @@ class DDNSCoordinator:
         request.set_DomainName(dns_section.domainName)
         request.set_accept_format('json')
         result = acsClient.do_action_with_exception(request)
-        result = json.JSONDecoder().decode(result)
+        result = json.loads(result.decode('utf8'))
 
         dns_record_list = result['DomainRecords']['Record']
 

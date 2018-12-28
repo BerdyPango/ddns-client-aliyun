@@ -13,7 +13,7 @@ argParser.add_argument("--access-key-id", '-i', help = 'The access key id assigi
 argParser.add_argument("--access-key-secret", '-k', help = 'The access key secret assigned by ddns api provider.')
 argParser.add_argument("--config", '-c', help = 'The configuration file to refer to for ddns process. If this option is set, all other options will be ignored.')
 
-args = argParser.parse_args()
+args = argParser.parse_args('--config ./ddns.conf'.split())
 
 if args.config: 
     CONFIG_FILE_PATH = args.config
@@ -24,9 +24,8 @@ if args.config:
     config = Config.from_config_file(CONFIG_FILE_PATH)
     coordinator = DDNSCoordinator(config)
     coordinator.perform_ddns()
-    sys.exit()
-
-if not args.domains or not args.access_key_id or not args.access_key_secret:
+    pass
+elif not args.domains or not args.access_key_id or not args.access_key_secret:
     argParser.print_help()
 else:
     DDNSUtils.info("Loading configuration from arguments.")
@@ -34,4 +33,4 @@ else:
     coordinator = DDNSCoordinator(config)
     coordinator.perform_ddns()
 
-sys.exit()
+pass

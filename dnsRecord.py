@@ -1,9 +1,8 @@
 import sys
-import string
 
 
 def lower_func(s):
-    return string.lower(s)
+    return s.lower()
 
 class DnsRecord:
     """
@@ -21,10 +20,10 @@ class DnsRecord:
         self.status = None
         self.locked = False
 
-        lowered_info = map(lower_func, dns_resolution_record.keys())
-        tuples = zip(lowered_info, dns_resolution_record.values())
+        lowered_info = list(map(lower_func, list(dns_resolution_record.keys())))
+        tuples = list(zip(lowered_info, list(dns_resolution_record.values())))
         converted_dns_resolution_info = dict(tuples)
 
-        for key in converted_dns_resolution_info.keys():
+        for key in list(converted_dns_resolution_info.keys()):
             self.__dict__[key] = converted_dns_resolution_info[key]
             

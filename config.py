@@ -1,4 +1,4 @@
-import ConfigParser
+import configparser
 
 from utils import DDNSUtils
 from apiProviderInfo import ApiProviderInfo
@@ -28,7 +28,7 @@ class Config:
         Returns: 
             Instance of Config
         """
-        parser = ConfigParser.ConfigParser()
+        parser = configparser.ConfigParser()
         if not parser.read(configFilePath):
             DDNSUtils.err_and_exit("Failed to read config file.")
 
@@ -65,9 +65,9 @@ class Config:
 
         except ValueError as ex:
             DDNSUtils.err_and_exit("Invalid debug in config: {0}".format(ex))
-        except ConfigParser.NoSectionError as ex:
+        except configparser.NoSectionError as ex:
             DDNSUtils.err_and_exit("Invalid config: {0}".format(ex))
-        except ConfigParser.NoOptionError as ex:
+        except configparser.NoOptionError as ex:
             DDNSUtils.err_and_exit("Invalid config: {0}".format(ex))
 
     @classmethod
