@@ -13,7 +13,7 @@ argParser.add_argument("--access-key-id", '-i', help = 'The access key id assigi
 argParser.add_argument("--access-key-secret", '-k', help = 'The access key secret assigned by ddns api provider.')
 argParser.add_argument("--config", '-c', help = 'The configuration file to refer to for ddns process. If this option is set, all other options will be ignored.')
 
-args = argParser.parse_args('--config ./ddns.conf'.split())
+args = argParser.parse_args()
 
 if args.config: 
     CONFIG_FILE_PATH = args.config
