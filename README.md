@@ -1,4 +1,4 @@
-This client is for domain owners hoping to perform ddns to their domains registered in aliyun. Writen in python 2.7.
+This client is for Aliyun domain owners hoping to perform ddns. Written in python 2.7.
 
 ## Limitations
 This version of DDNS client only supports updating 'A' type dns record with IPv4.
@@ -44,6 +44,6 @@ type = A
 The client will exit immediately after running through. If you want to run it regularly, append a crontab job on *NIX or a task scheduler job on Windows.
 
 ## Roadmap
-- [Done]Create a docker image for the script and put it into another repository. You could find the docker image repo [here](https://github.com/BerdyPango/ddns-client-aliyun-docker)
-- Support creation if not found target dns record.
+- [Done]Create a docker image for the script and put it into another repository. You could find the docker image at [Docker Hub](https://github.com/BerdyPango/ddns-client-aliyun-docker).
+- Add new if target record is not found.
 - Compatibility with python3.
