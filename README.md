@@ -11,14 +11,6 @@ If you:
 ## Limitations
 This version of DDNS client only supports updating 'A' type dns record with IPv4.
 
-## Prerequisites
-3rd party python libraries are required, you can install them via pip:
-``` bash
-$(sudo) pip install requests
-$(sudo) pip install aliyun-python-sdk-core
-$(sudo) pip install aliyun-python-sdk-alidns
-```
-
 ## Usage
 First, you need to get some key information ready:
 - Your domain name registered at Aliyun.
@@ -28,6 +20,7 @@ Then, clone this repo into your home server or local machine:
 ```bash
 $ git clone https://github.com/BerdyPango/ddns-client-aliyun.git
 $ cd ddns-client-aliyun
+$ pip install -r requirements.txt
 ```
 The client can be configured either with an `--config` option specifying the path to the configuration file or directly populating the values of each option through cli.
 
@@ -69,8 +62,16 @@ $ (sudo) cp ./config-samples/ddns.conf.sample ./ddns.conf
 $ (sudo) python ddns.py --config ddns.conf
 ```
 
+## Automation
+Create a crontab job:
+```bash
+*/5 * * * * cd /home/pi/apps/ddns-client-aliyun && /usr/bin/python ./ddns.py --config ./ddns.conf >> ./logs/log.txt 2>&1
+```
+
 ## Docker Support
-If you prefer the Docker way. You could find the docker image at [Docker Hub](https://hub.docker.com/r/frosthe/ddns-client-aliyun). Simply pull the image into your home server or local machine:
+If you prefer the Docker way. You could find the docker image at [Docker Hub](https://hub.docker.com/r/frosthe/ddns-client-aliyun). Currently it only supports amd64 CPUs. 
+
+Simply pull the image into your home server or local machine:
 ```
 $ (sudo) docker pull frosthe/ddns-client-aliyun
 ```
