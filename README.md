@@ -80,7 +80,7 @@ $ (sudo) docker run frosthe/ddns-client-aliyun --config ./ddns.conf
 ```
 or
 ```bash
-$ (sudo) docker run frosthe/ddns-client-aliyun --domains www.example.com --access-key-id XXXXXXXXX --access-key-secret XXXXXXXXXXXXX
+$ (sudo) docker run --rm frosthe/ddns-client-aliyun --domains www.example.com --access-key-id XXXXXXXXX --access-key-secret XXXXXXXXXXXXX
 ```
 
 The program will exit immediately after running through. If you want to run it regularly, append a crontab job on *NIX or a task scheduler job on Windows. For example, we could restart the docker container every 10 seconds:
