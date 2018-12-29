@@ -14,4 +14,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["python", "./ddns.py"]
+ENTRYPOINT ["python", "./ddns.py"]
