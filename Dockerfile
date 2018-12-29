@@ -1,7 +1,17 @@
-FROM python:3.6-alpine
+FROM alpine:3.8
+LABEL maintainer="frosthe@qq.com"
 
-COPY . /app
+RUN apk add --update \
+    python \
+    python-dev \
+    py-pip \
+    build-base \
+  && rm -rf /var/cache/apk/*
+
 WORKDIR /app
+COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
-ENTRYPOINT ["python", "./ddns.py"]
+COPY . .
+
+CMD ["python", "./ddns.py"]
