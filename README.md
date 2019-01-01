@@ -1,22 +1,22 @@
 ## Scenarios
-For those who host their websites at home server, exposing their sites to external internet via a domain name registered from Aliyun. It's been annoying that they need to manually update the dns record whenever the ISP changed their home public IP address. 
+For those who host their websites at home server, expecting access to the sites from external internet, it's been annoying that they need to manually update the dns record once the ISP re-assign their home public IP address. 
 
 ## Why should I use a ddns client rather than a ddns provider?
 If you:
-- Expect a lightweight tool running regularly to perform ddns
+- Expect a lightweight tool running regularly to perform ddns.
 - Expect a custom domain name instead of a given sub domain from ddns providers.
-- Do not want to provide ddns providers with your information merely to get a ddns service.
+- Do not want to provide ddns providers with your real information merely to get a ddns service.
 - Have suffered the terrible network connection with the free of charge ddns providers outside mainland China.
 
 ## Limitations
 This version of DDNS client only supports updating 'A' type dns record with IPv4.
 
 ## Usage
-First, you need to get some key information ready:
-- Your domain name registered at Aliyun.
-- Your Aliyun domain resolution API access id and key.
+First, you need to get ready some key information:
+- The domain name registered at Aliyun.
+- The API key assigned by Aliyun to manage your dns records programmatically.
 
-Then, clone this repo into your home server or local machine:
+Clone this repo into your home server or local machine:
 ```bash
 $ git clone https://github.com/BerdyPango/ddns-client-aliyun.git
 $ cd ddns-client-aliyun
@@ -63,7 +63,7 @@ $ (sudo) python ddns.py --config ddns.conf
 ```
 
 ## Automation
-Create a crontab job:
+Create a crontab job to run the client every 5 min:
 ```bash
 */5 * * * * cd /home/pi/apps/ddns-client-aliyun && /usr/bin/python ./ddns.py --config ./ddns.conf >> ./logs/log.txt 2>&1
 ```
